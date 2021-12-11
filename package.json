@@ -1,0 +1,25 @@
+{
+  "name": "yourTrip",
+  "version": "1.0.0",
+  "description": "A website that displays places to travel in your area Basic use of mern-stack",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HimanshT/yourTrip.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HimanshT/yourTrip/issues"
+  },
+  "homepage": "https://github.com/HimanshT/yourTrip#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "mongoose": "^6.1.1"
+  }
+}
