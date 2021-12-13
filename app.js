@@ -109,6 +109,14 @@ app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res)
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
 }))
+//for deleting the reviews of campground
+//pull operator is to delete the review of that campground
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } })
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+}))
 // for showing 404
 // if i am passing to next it will pass to below function
 app.all('*', (req, res, next) => {
