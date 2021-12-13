@@ -27,9 +27,13 @@ const seedDb = async () => {
     await Campground.deleteMany({});//every schema fn has curly brackets inside
     for (let i = 0; i < 50; i++) {
         const random = Math.floor(Math.random() * 1000);
+        const price = Math.floor(Math.random() * 30) + 10;
         const camp = new Campground({
             location: `${cities[random].city},${cities[random].state}`,
-            title: `${sample(descriptors)} ${sample(places)} `
+            title: `${sample(descriptors)} ${sample(places)} `,
+            image: 'https://source.unsplash.com/collection/483251',
+            description: 'it is a good place',
+            price: price
         })
         await camp.save();
     }
