@@ -33,13 +33,18 @@ router.get('/new', (req, res) => {
 router.post('/', validateCampground, catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Invalid Campground Data');
     const campground = new Campground(req.body.campground);
-    await campground.save()
-    res.redirect(`campgrounds/${campground._id}`);
+    await campground.save();
+    req.flash('success', 'Successfully made a new campground!');
+    res.redirect(`/campgrounds/${campground._id}`);
 }))
 
 //for individual campgrounds
 router.get('/:id', catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id).populate('reviews');//populate is used to show reviws on main page
+    if (!campground) {
+        req.flash('error', 'Sorry,campground not available');
+        res.redirect('/campgrounds');
+    }
     res.render('campgrounds/show', { campground });
 }))
 //editing a campground
@@ -51,12 +56,14 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 router.put('/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    res.redirect(`${campground._id}`); // res.redirect('/campgrounds/${campground._id}) is not working;
+    req.flash('sucess', "Successfully Updated");
+    res.redirect(`/campgrounds/${campground._id}`); // res.redirect('/campgrounds/${campground._id}) is not working;
 }))
 //to delete the campground
 router.delete('/:id', catchAsync(async (req, res) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
+    req.flash('success', ' Campground Deleted')
     res.redirect('/campgrounds');
 }))
 
