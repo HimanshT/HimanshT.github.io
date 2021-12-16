@@ -13,7 +13,7 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 //routes
 const userRoutes = require('./routes/users');
-const campgroundRoutes = require('./routes/campground');
+const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 // Mongoose Connection
 mongoose.connect('mongodb://localhost:27017/yourTrip',
