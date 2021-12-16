@@ -1,27 +1,17 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync');//for async funtion
-const ExpressError = require('../utils/ExpressError');
 const Campground = require('../models/campground');
-const { reviewSchema } = require('../schemas');
 const Review = require('../models/review');
-
+const { validateReview, isLoggedIn } = require('../middleware');
 //middleware of joi -->review
 //this is done to prevent it's data extraction from postman
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-}
 
 //for submitting reviews of campground
-router.post('/', validateReview, catchAsync(async (req, res) => {
+router.post('/', validateReview, isLoggedIn, catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
+    review.author = req.user._id;
     campground.reviews.push(review);
     await review.save();
     await campground.save();
