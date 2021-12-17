@@ -3,7 +3,7 @@ const router = express.Router({ mergeParams: true });
 const catchAsync = require('../utils/catchAsync');//for async funtion
 const Campground = require('../models/campground');
 const Review = require('../models/review');
-const { validateReview, isLoggedIn } = require('../middleware');
+const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware');
 //middleware of joi -->review
 //this is done to prevent it's data extraction from postman
 
@@ -20,7 +20,7 @@ router.post('/', validateReview, isLoggedIn, catchAsync(async (req, res) => {
 }))
 //for deleting the reviews of campground
 //pull operator is to delete the review of that campground
-router.delete('/:reviewId', catchAsync(async (req, res) => {
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } })
     await Review.findByIdAndDelete(reviewId);

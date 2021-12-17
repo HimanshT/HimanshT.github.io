@@ -28,7 +28,12 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res, nex
 
 //for individual campgrounds
 router.get('/:id', catchAsync(async (req, res) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');//populate is used to show reviws on main page
+    const campground = await Campground.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');//populate is used to show reviws on main page
     console.log(campground)
     if (!campground) {
         req.flash('error', 'Sorry,campground not available');
