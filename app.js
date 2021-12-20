@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== "production") {
+    require('dotenv').config();
+}
+
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -41,7 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));//for adding external js
 const sessionConfig = {
     secret: 'himanshu',
     resave: false,
-    saveUnitialized: true,
+    saveUninitialized: true,
     cookie: {
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, //milleseconds

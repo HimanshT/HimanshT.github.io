@@ -6,10 +6,15 @@ const Joi = require('joi');
 const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 //controller routes
 const campgrounds = require('../controllers/campgrounds')
-
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage: storage });
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+    // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
+    .post(upload.array('image'), (req, res) => {
+        res.json(req.file);
+    })
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 
