@@ -13,7 +13,7 @@ router.route('/')
     .get(catchAsync(campgrounds.index))
     // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
     .post(upload.array('image'), (req, res) => {
-        res.json(req.file);
+        res.json(req.files);
     })
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
