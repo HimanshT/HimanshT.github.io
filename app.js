@@ -50,7 +50,7 @@ app.use(helmet({
     contentSecurityPolicy: false,
   }));
 
-const secret = process.env.SECRET || 'noyoucantaccessit';
+const secret = process.env.SECRET;
 
 const store = new MongoStore({
     mongoUrl:dbUrl,
