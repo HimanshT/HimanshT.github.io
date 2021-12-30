@@ -21,8 +21,10 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const MongoStore = require('connect-mongo');
+const dbUrl ='mongodb://localhost:27017/yourTrip' ;
 // Mongoose Connection
-mongoose.connect('mongodb://localhost:27017/yourTrip',
+mongoose.connect(dbUrl,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -48,7 +50,18 @@ app.use(helmet({
     contentSecurityPolicy: false,
   }));
 
+const store = new MongoStore({
+    mongoUrl:dbUrl,
+    secret:'noyoucantaccessit',
+    touchAfter:24*60*60
+})
+
+store.on("error",function(e){
+    console.log("mongostore error");
+})
+
 const sessionConfig = {
+    store,
     name:'good',
     secret: 'noyoucantaccessit',
     resave: false,
