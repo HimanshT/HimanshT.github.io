@@ -25,7 +25,7 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDb = async () => {
     await Campground.deleteMany({});//every schema fn has curly brackets inside
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 200; i++) {
         const random = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 30) + 10;
         const camp = new Campground({
@@ -33,6 +33,10 @@ const seedDb = async () => {
             location: `${cities[random].city},${cities[random].state}`,
             title: `${sample(descriptors)} ${sample(places)} `,
             description: 'it is a good place',
+            geometry: {
+                type: 'Point',
+                coordinates: [cities[random].longitude, cities[random].latitude]
+            },
             price: price,
             images: [
                 {
