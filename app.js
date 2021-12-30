@@ -22,7 +22,7 @@ const reviewRoutes = require('./routes/reviews');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const MongoStore = require('connect-mongo');
-const dbUrl ='mongodb://localhost:27017/yourTrip' ;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yourTrip' ;
 // Mongoose Connection
 mongoose.connect(dbUrl,
     {
@@ -50,9 +50,11 @@ app.use(helmet({
     contentSecurityPolicy: false,
   }));
 
+const secret = process.env.SECRET || 'noyoucantaccessit';
+
 const store = new MongoStore({
     mongoUrl:dbUrl,
-    secret:'noyoucantaccessit',
+    secret,
     touchAfter:24*60*60
 })
 
@@ -63,7 +65,7 @@ store.on("error",function(e){
 const sessionConfig = {
     store,
     name:'good',
-    secret: 'noyoucantaccessit',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
