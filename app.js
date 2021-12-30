@@ -19,6 +19,8 @@ const User = require('./models/user');
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 // Mongoose Connection
 mongoose.connect('mongodb://localhost:27017/yourTrip',
     {
@@ -41,13 +43,19 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));//for adding external js and css
+app.use(mongoSanitize());
+app.use(helmet({
+    contentSecurityPolicy: false,
+  }));
 
 const sessionConfig = {
-    secret: 'himanshu',
+    name:'good',
+    secret: 'noyoucantaccessit',
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        //secure:true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, //milleseconds
         maxAge: 1000 * 60 * 60 * 24 * 7
     }
@@ -64,7 +72,6 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
-    // console.log(req.session);
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
