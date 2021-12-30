@@ -1,10 +1,11 @@
 {
-  "name": "yourTrip",
+  "name": "yourtrip",
   "version": "1.0.0",
   "description": "A website that displays places to travel in your area Basic use of mern-stack",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node app.js"
   },
   "repository": {
     "type": "git",
