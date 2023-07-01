@@ -30,7 +30,7 @@ const seedDb = async () => {
         const price = Math.floor(Math.random() * 30) + 10;
         const camp = new Campground({
             author: "61bae5ee900091534a600ed9",
-            location: `${cities[random].city},${cities[random].state}`,
+            location: `${cities[random].city},${cities[random].state}`, //we are using template string here to get the city and state
             title: `${sample(descriptors)} ${sample(places)} `,
             description: 'it is a good place',
             geometry: {

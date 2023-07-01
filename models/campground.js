@@ -11,7 +11,7 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200')
 })
 
-const opts = { toJSON: { virtuals: true } }
+const opts = { toJSON: { virtuals: true } } //this is used to make the virtual property to be shown in the json
 
 const CampgroundSchema = new Schema({
     title: String,
@@ -19,7 +19,7 @@ const CampgroundSchema = new Schema({
     geometry: {
         type: {
             type: String,
-            enum: ['Point'],
+            enum: ['Point'], // 'location.type' must be 'Point'
             required: true
         },
         coordinates: {
@@ -42,7 +42,7 @@ const CampgroundSchema = new Schema({
     ]
 }, opts)
 
-CampgroundSchema.virtual('properties.popUpMarkup').get(function(){
+CampgroundSchema.virtual('properties.popUpMarkup').get(function () {
     return `<a href="/campgrounds/${this._id}">${this.title}</a>`
 });
 

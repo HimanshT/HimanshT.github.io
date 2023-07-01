@@ -4,7 +4,7 @@ const Campground = require('./models/campground');
 const Review = require('./models/review');
 
 module.exports.isLoggedIn = (req, res, next) => {
-    if (!req.isAuthenticated()) {
+    if (!req.isAuthenticated()) { // isAuthenticated is a function from passport which is used to check whether the user is logged in or not
         req.session.returnTo = req.originUrl;
         req.flash('error', 'you must be logged in');
         return res.redirect('/login');
@@ -14,16 +14,16 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 //middleware for joi -->campground
 module.exports.validateCampground = (req, res, next) => {
-    const { error } = campgroundSchema.validate(req.body);
+    const { error } = campgroundSchema.validate(req.body);// validating the campground schema with the help of joi
     if (error) {
-        const msg = error.details.map(el => el.message).join(',');
+        const msg = error.details.map(el => el.message).join(','); //mapping the error and joining it with a comma
         throw new ExpressError(msg, 400);
     } else {
         next();
     }
 }
 
-module.exports.isAuthor = async (req, res, next) => {
+module.exports.isAuthor = async (req, res, next) => { //checking whether the user is the author of the campground or not
     const { id } = req.params;
     const campground = await Campground.findById(id);
     if (!campground.author.equals(req.user._id)) {
@@ -33,7 +33,7 @@ module.exports.isAuthor = async (req, res, next) => {
     next();
 }
 
-module.exports.validateReview = (req, res, next) => {
+module.exports.validateReview = (req, res, next) => { //```validateReview``` is a middleware that will validate the review schema with the help of ```joi```.
     const { error } = reviewSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',');
@@ -46,7 +46,7 @@ module.exports.validateReview = (req, res, next) => {
 module.exports.isReviewAuthor = async (req, res, next) => {
     const { id, reviewId } = req.params;
     const review = await Review.findById(reviewId);
-    if (!review.author.equals(req.user._id)) {
+    if (!review.author.equals(req.user._id)) { //checking whether the user is the author of the review or not
         req.flash('error', 'Sorry! No permission');
         return res.redirect(`/campgrounds/${id}`);
     }

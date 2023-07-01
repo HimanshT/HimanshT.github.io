@@ -18,7 +18,7 @@ module.exports.createCampground = async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Invalid Campground Data');
     const geoData = await geocoder.forwardGeocode({
         query: req.body.campground.location,
-        limit: 1
+        limit: 1 //we are limiting the result to 1
     }).send()
     const campground = new Campground(req.body.campground);
     campground.geometry = geoData.body.features[0].geometry;
@@ -55,9 +55,9 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename }));
-    campground.images.push(...imgs);
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }); // ... is used to spread the req.body.campground
+    const imgs = req.files.map(f => ({ url: f.path, filename: f.filename })); // we are mapping the images to get the url and filename
+    campground.images.push(...imgs); // we are pushing the images to the campground.images
     await campground.save();
     if (req.body.deleteImages) {
         for (let filename of req.body.deleteImages) {

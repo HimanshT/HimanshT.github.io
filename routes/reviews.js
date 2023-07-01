@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true }); //mergeParams is used to merge the params of campground and reviews
 const catchAsync = require('../utils/catchAsync');//for async funtion
 const { validateReview, isLoggedIn, isReviewAuthor } = require('../middleware');
 const reviews = require('../controllers/reviews');
